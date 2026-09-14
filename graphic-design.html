@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Cathy Zhang — graphic design portfolio and interactive Pablo Picasso zine."
+    />
+    <title>Graphic Design — Cathy Zhang Portfolio</title>
+    <link rel="stylesheet" href="graphic-design.css?v=20260914-1" />
+  </head>
+  <body>
+    <main class="graphic-page">
+      <header class="site-header">
+        <nav class="primary-nav" aria-label="Portfolio sections">
+          <a href="index.html">Home</a>
+          <a href="#" aria-disabled="true">Photography</a>
+          <a href="#" aria-disabled="true">Videography</a>
+          <a href="graphic-design.html" class="is-current" aria-current="page">Graphic Design</a>
+          <a href="#" aria-disabled="true">About</a>
+        </nav>
+      </header>
+
+      <section class="zine-experience" aria-labelledby="zine-title">
+        <h1 id="zine-title" class="sr-only">Pablo Picasso interactive zine</h1>
+
+        <img
+          class="fragment fragment--top-left"
+          src="assets/graphic-design/fragment-top-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--mid-left"
+          src="assets/graphic-design/fragment-mid-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--bottom-left"
+          src="assets/graphic-design/fragment-bottom-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--top-right"
+          src="assets/graphic-design/fragment-top-right.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--bottom-right"
+          src="assets/graphic-design/fragment-bottom-right.png"
+          alt=""
+          aria-hidden="true"
+        />
+
+        <div class="book-stage" id="bookStage">
+          <img
+            class="book-fallback"
+            src="assets/zine/cover.jpg"
+            alt="Pablo Picasso zine cover"
+          />
+          <canvas id="bookCanvas" aria-label="Interactive Pablo Picasso zine"></canvas>
+          <button class="page-hit page-hit--left" id="previousPage" type="button">
+            <span class="sr-only">Turn to the previous spread</span>
+          </button>
+          <button class="page-hit page-hit--right" id="nextPage" type="button">
+            <span class="sr-only">Turn to the next spread</span>
+          </button>
+          <p class="page-status sr-only" id="pageStatus" aria-live="polite">Cover</p>
+        </div>
+
+      </section>
+    </main>
+
+    <script src="vendor/three.classic.js?v=20260805-1"></script>
+    <script src="graphic-design.js?v=20260914-1"></script>
+  </body>
+</html>

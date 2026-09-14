@@ -1,4 +1,4 @@
-# Cathy Zhang Portfolio — Homepage
+# Cathy Zhang Portfolio
 
 Open `index.html` in a browser to preview the homepage.
 
@@ -12,4 +12,14 @@ Open `index.html` in a browser to preview the homepage.
 - Reduced-motion support
 - Camera-facing serif title and future section labels floating 2,200px in front of the curved image surface
 
-The section labels are intentionally non-functional for this first version. They can be converted to links when the corresponding pages are added.
+## Graphic Design
+
+The **Graphic Design** navigation item now links to `graphic-design.html`.
+
+- Layout translated from the supplied Figma frame
+- Local copies of the exact Figma collage fragments
+- Three.js Picasso zine with a portrait cover and eight interior spreads
+- Curved, shaded page turns in both directions
+- Correct front/back texture mapping from the supplied two-page spread files
+- Click, keyboard-arrow, touch, and interactive-mode controls
+- Responsive framing and reduced-motion support
