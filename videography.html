@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Cathy Zhang — videography portfolio, short films, moving-image works, and selected frames."
+    />
+    <title>Videography — Cathy Zhang Portfolio</title>
+    <link rel="stylesheet" href="videography.css?v=20260916-5" />
+  </head>
+  <body>
+    <main class="video-page">
+      <header class="site-header">
+        <nav class="primary-nav" aria-label="Portfolio sections">
+          <a href="index.html">Home</a>
+          <a href="#" aria-disabled="true">Photography</a>
+          <a href="videography.html" class="is-current" aria-current="page">Videography</a>
+          <a href="graphic-design.html">Graphic Design</a>
+          <a href="#" aria-disabled="true">About</a>
+        </nav>
+      </header>
+
+      <section class="carousel" id="carousel" aria-label="Selected videography projects">
+        <div class="orbit-line" aria-hidden="true"></div>
+        <div class="carousel-track" id="carouselTrack"></div>
+
+        <div class="project-heading" aria-live="polite">
+          <p class="project-heading__eyebrow" id="activeCategory"></p>
+          <h1 id="activeTitle"></h1>
+          <p class="project-heading__runtime" id="activeRuntime"></p>
+        </div>
+
+        <aside class="project-index">
+          <nav class="project-list" id="projectList" aria-label="Film index"></nav>
+          <p class="project-count" aria-label="Current project">
+            <span id="currentProject">01</span>
+            <span aria-hidden="true">/</span>
+            <span id="totalProjects">07</span>
+          </p>
+        </aside>
+
+        <p class="carousel-hint"><span aria-hidden="true">↔</span> Drag or scroll to explore</p>
+      </section>
+    </main>
+
+    <dialog class="project-dialog" id="projectDialog" aria-labelledby="dialogTitle">
+      <div class="dialog-shell">
+        <header class="dialog-header">
+          <div>
+            <p class="dialog-category">
+              <span id="dialogCategory"></span>
+              <span aria-hidden="true"> · </span>
+              <span id="dialogRuntime"></span>
+            </p>
+            <h2 id="dialogTitle"></h2>
+          </div>
+          <button class="dialog-close" id="closeDialog" type="button" aria-label="Close project">
+            <span aria-hidden="true">×</span> Close
+          </button>
+        </header>
+
+        <div class="dialog-body">
+          <div class="video-frame">
+            <video id="projectVideo" controls playsinline preload="metadata"></video>
+          </div>
+
+          <section class="stills-section" aria-labelledby="stillsTitle">
+            <div class="stills-heading">
+              <h3 id="stillsTitle">Selected Stills</h3>
+              <p id="stillsCount"></p>
+            </div>
+            <div class="stills-grid" id="stillsGrid"></div>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="videography.js?v=20260916-4"></script>
+  </body>
+</html>
