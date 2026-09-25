@@ -116,6 +116,222 @@ const stillsSection = document.querySelector(".stills-section");
 const stillsCount = document.querySelector("#stillsCount");
 const stillsGrid = document.querySelector("#stillsGrid");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const ditherBackground = document.querySelector("#ditherBackground");
+const ditherBackgroundNext = document.querySelector("#ditherBackgroundNext");
+const alternateLayout = Boolean(ditherBackground);
+
+const bayer4 = [
+  [0, 8, 2, 10],
+  [12, 4, 14, 6],
+  [3, 11, 1, 9],
+  [15, 7, 13, 5],
+];
+const ditherPixelScale = 1;
+const ditherDark = [70, 70, 68];
+const ditherPaper = [253, 253, 252];
+let ditherRenderToken = 0;
+let ditherResizeTimer = 0;
+let ditherTransitionTimer = 0;
+let activeDitherBackground = ditherBackground;
+let ditherHasRendered = false;
+const roamingLuminanceByRatio = new Map();
+
+function presentDitherBackground(renderCanvas, width, height, token) {
+  if (!ditherBackground) return;
+
+  if (!ditherBackgroundNext || !ditherHasRendered || reducedMotion.matches) {
+    ditherBackground.width = width;
+    ditherBackground.height = height;
+    const visibleContext = ditherBackground.getContext("2d", { alpha: false });
+    visibleContext.drawImage(renderCanvas, 0, 0);
+    ditherBackground.classList.add("is-visible");
+    activeDitherBackground = ditherBackground;
+    ditherHasRendered = true;
+    return;
+  }
+
+  window.clearTimeout(ditherTransitionTimer);
+
+  const outgoing = activeDitherBackground;
+  const incoming = outgoing === ditherBackground ? ditherBackgroundNext : ditherBackground;
+
+  outgoing.style.transition = "none";
+  outgoing.classList.add("is-visible");
+  outgoing.style.zIndex = "0";
+
+  incoming.style.transition = "none";
+  incoming.classList.remove("is-visible");
+  incoming.style.zIndex = "1";
+  incoming.width = width;
+  incoming.height = height;
+  const incomingContext = incoming.getContext("2d", { alpha: false });
+  incomingContext.drawImage(renderCanvas, 0, 0);
+  void incoming.offsetWidth;
+
+  window.requestAnimationFrame(() => {
+    if (token !== ditherRenderToken) return;
+
+    incoming.style.transition = "";
+    incoming.classList.add("is-visible");
+    activeDitherBackground = incoming;
+
+    ditherTransitionTimer = window.setTimeout(() => {
+      if (activeDitherBackground !== incoming) return;
+
+      outgoing.style.transition = "none";
+      outgoing.classList.remove("is-visible");
+      outgoing.style.zIndex = "0";
+      void outgoing.offsetWidth;
+      outgoing.style.transition = "";
+    }, 780);
+  });
+}
+
+function measureImageLuminance(src, targetRatio) {
+  const ratioKey = targetRatio.toFixed(3);
+  const cached = roamingLuminanceByRatio.get(ratioKey);
+  if (cached) return cached;
+
+  const measurement = new Promise((resolve) => {
+    const reference = new Image();
+
+    reference.addEventListener("load", () => {
+      const sampleWidth = 160;
+      const sampleHeight = Math.max(1, Math.round(sampleWidth / targetRatio));
+      const sampleCanvas = document.createElement("canvas");
+      const sampleContext = sampleCanvas.getContext("2d", { alpha: false });
+      const sourceRatio = reference.naturalWidth / reference.naturalHeight;
+      let sourceWidth = reference.naturalWidth;
+      let sourceHeight = reference.naturalHeight;
+      let sourceX = 0;
+      let sourceY = 0;
+
+      sampleCanvas.width = sampleWidth;
+      sampleCanvas.height = sampleHeight;
+
+      if (sourceRatio > targetRatio) {
+        sourceWidth = reference.naturalHeight * targetRatio;
+        sourceX = (reference.naturalWidth - sourceWidth) / 2;
+      } else {
+        sourceHeight = reference.naturalWidth / targetRatio;
+        sourceY = (reference.naturalHeight - sourceHeight) / 2;
+      }
+
+      sampleContext.drawImage(
+        reference,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        0,
+        0,
+        sampleWidth,
+        sampleHeight,
+      );
+
+      const samplePixels = sampleContext.getImageData(0, 0, sampleWidth, sampleHeight).data;
+      let total = 0;
+
+      for (let offset = 0; offset < samplePixels.length; offset += 4) {
+        total += (samplePixels[offset] * 0.299 + samplePixels[offset + 1] * 0.587 + samplePixels[offset + 2] * 0.114) / 255;
+      }
+
+      resolve(total / (samplePixels.length / 4));
+    });
+
+    reference.src = src;
+  });
+
+  roamingLuminanceByRatio.set(ratioKey, measurement);
+  return measurement;
+}
+
+function renderDitherBackground(src) {
+  if (!ditherBackground) return;
+
+  const token = ++ditherRenderToken;
+  const width = Math.max(1, Math.round(carousel.clientWidth));
+  const height = Math.max(1, Math.round(carousel.clientHeight));
+  const image = new Image();
+
+  image.addEventListener("load", async () => {
+    if (token !== ditherRenderToken) return;
+
+    const renderCanvas = document.createElement("canvas");
+    renderCanvas.width = width;
+    renderCanvas.height = height;
+    const context = renderCanvas.getContext("2d", { alpha: false });
+    const sourceRatio = image.naturalWidth / image.naturalHeight;
+    const canvasRatio = width / height;
+    let sourceWidth = image.naturalWidth;
+    let sourceHeight = image.naturalHeight;
+    let sourceX = 0;
+    let sourceY = 0;
+
+    if (sourceRatio > canvasRatio) {
+      sourceWidth = image.naturalHeight * canvasRatio;
+      sourceX = (image.naturalWidth - sourceWidth) / 2;
+    } else {
+      sourceHeight = image.naturalWidth / canvasRatio;
+      sourceY = (image.naturalHeight - sourceHeight) / 2;
+    }
+
+    context.drawImage(
+      image,
+      sourceX,
+      sourceY,
+      sourceWidth,
+      sourceHeight,
+      0,
+      0,
+      width,
+      height,
+    );
+
+    const frame = context.getImageData(0, 0, width, height);
+    const pixels = frame.data;
+    let totalLuminance = 0;
+
+    for (let offset = 0; offset < pixels.length; offset += 4) {
+      totalLuminance += (pixels[offset] * 0.299 + pixels[offset + 1] * 0.587 + pixels[offset + 2] * 0.114) / 255;
+    }
+
+    const averageLuminance = totalLuminance / (pixels.length / 4);
+    const roamingLuminance = await measureImageLuminance("assets/videography/roaming/cover.jpg", canvasRatio);
+    if (token !== ditherRenderToken) return;
+    const luminanceShift = (roamingLuminance - averageLuminance) * 0.8;
+
+    for (let y = 0; y < height; y += 1) {
+      for (let x = 0; x < width; x += 1) {
+        const offset = (y * width + x) * 4;
+        const ditherCellX = Math.floor(x / ditherPixelScale);
+        const ditherCellY = Math.floor(y / ditherPixelScale);
+        const sampleX = Math.min(width - 1, Math.floor((ditherCellX + 0.5) * ditherPixelScale));
+        const sampleY = Math.min(height - 1, Math.floor((ditherCellY + 0.5) * ditherPixelScale));
+        const sampleOffset = (sampleY * width + sampleX) * 4;
+        const luminance = (pixels[sampleOffset] * 0.299 + pixels[sampleOffset + 1] * 0.587 + pixels[sampleOffset + 2] * 0.114) / 255;
+        const brightnessAdjusted = Math.min(1, Math.max(0, (luminance + luminanceShift) * 1.07));
+        const matrixX = ditherCellX % 4;
+        const matrixY = ditherCellY % 4;
+        const threshold = (bayer4[matrixY][matrixX] + 0.5) / 16;
+        const color = brightnessAdjusted >= threshold ? ditherPaper : ditherDark;
+
+        pixels[offset] = color[0];
+        pixels[offset + 1] = color[1];
+        pixels[offset + 2] = color[2];
+        pixels[offset + 3] = 255;
+      }
+    }
+
+    context.putImageData(frame, 0, 0);
+
+    if (token !== ditherRenderToken) return;
+
+    presentDitherBackground(renderCanvas, width, height, token);
+  });
+
+  image.src = src;
+}
 
 const cards = projects.map((project, index) => {
   const card = document.createElement("button");
@@ -172,6 +388,7 @@ function updateProjectText(index) {
   activeCategory.textContent = project.category;
   activeRuntime.textContent = project.runtime;
   currentProject.textContent = String(index + 1).padStart(2, "0");
+  renderDitherBackground(project.poster);
 
   cards.forEach((card, cardIndex) => {
     const active = cardIndex === index;
@@ -353,6 +570,15 @@ dialog.addEventListener("click", (event) => {
 dialog.addEventListener("cancel", (event) => {
   event.preventDefault();
   hideProject();
+});
+
+window.addEventListener("resize", () => {
+  if (!alternateLayout) return;
+
+  window.clearTimeout(ditherResizeTimer);
+  ditherResizeTimer = window.setTimeout(() => {
+    renderDitherBackground(projects[selectedIndex].poster);
+  }, 100);
 });
 
 function animate(now) {

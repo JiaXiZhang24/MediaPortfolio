@@ -8,22 +8,28 @@
       content="Cathy Zhang — graphic design portfolio and interactive Pablo Picasso zine."
     />
     <title>Graphic Design — Cathy Zhang Portfolio</title>
-    <link rel="stylesheet" href="graphic-design.css?v=20260916-2" />
+    <link rel="stylesheet" href="graphic-design.css?v=20260925-3" />
   </head>
   <body>
     <main class="graphic-page">
       <header class="site-header">
         <nav class="primary-nav" aria-label="Portfolio sections">
-          <a href="index.html">Home</a>
-          <a href="#" aria-disabled="true">Photography</a>
-          <a href="videography.html">Videography</a>
-          <a href="graphic-design.html" class="is-current" aria-current="page">Graphic Design</a>
-          <a href="#" aria-disabled="true">About</a>
+          <a class="nav-home" href="index.html">Home</a>
+          <div class="nav-sections">
+            <a href="#" aria-disabled="true">Photography</a>
+            <a href="videography.html">Videography</a>
+            <a href="graphic-design.html" class="is-current" aria-current="page">Graphic Design</a>
+            <a href="#" aria-disabled="true">About</a>
+          </div>
         </nav>
       </header>
 
       <section class="zine-experience" aria-labelledby="zine-title">
-        <h1 id="zine-title" class="sr-only">Pablo Picasso interactive zine</h1>
+        <div class="zine-heading">
+          <p class="zine-heading__eyebrow">Zine</p>
+          <h1 id="zine-title">5 Eras of Pablo Picasso</h1>
+          <p class="zine-heading__year">2020</p>
+        </div>
 
         <img
           class="fragment fragment--top-left"
@@ -55,6 +61,24 @@
           alt=""
           aria-hidden="true"
         />
+        <img
+          class="fragment fragment--upper-middle"
+          src="assets/graphic-design/fragment-bottom-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--middle-right"
+          src="assets/graphic-design/fragment-mid-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--lower-middle"
+          src="assets/graphic-design/fragment-bottom-right.png"
+          alt=""
+          aria-hidden="true"
+        />
 
         <div class="book-stage" id="bookStage">
           <img
@@ -76,6 +100,6 @@
     </main>
 
     <script src="vendor/three.classic.js?v=20260805-1"></script>
-    <script src="graphic-design.js?v=20260914-1"></script>
+    <script src="graphic-design.js?v=20260925-2"></script>
   </body>
 </html>

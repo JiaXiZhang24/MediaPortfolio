@@ -28,6 +28,8 @@
       angle,
       targetAngle: angle,
       speed: 4 + Math.random() * 4,
+      impulseX: 0,
+      impulseY: 0,
       rotation: 0,
       spin: (Math.random() - 0.5) * 0.28,
       baseRotation,
@@ -35,6 +37,15 @@
     };
   });
   let previousFragmentTime = 0;
+  const backgroundDrag = {
+    active: false,
+    pointerId: null,
+    x: 0,
+    y: 0,
+    velocityX: 0,
+    velocityY: 0,
+    previousTime: 0,
+  };
   const spreads = [
     { src: "assets/zine/content.jpg", label: "Content · pages 0–1" },
     { src: "assets/zine/02-03.jpg", label: "The Blue Era · pages 2–3" },
@@ -428,6 +439,163 @@
     return Math.atan2(Math.sin(to - from), Math.cos(to - from));
   }
 
+  function getFragmentBounds(motion) {
+    const width = motion.element.offsetWidth;
+    const height = motion.element.offsetHeight;
+    const rotation = THREE.MathUtils.degToRad(motion.baseRotation + motion.rotation);
+    const cosine = Math.abs(Math.cos(rotation));
+    const sine = Math.abs(Math.sin(rotation));
+    const boundsWidth = width * cosine + height * sine;
+    const boundsHeight = width * sine + height * cosine;
+    const left = motion.element.offsetLeft + motion.x - (boundsWidth - width) / 2;
+    const top = motion.element.offsetTop + motion.y - (boundsHeight - height) / 2;
+
+    return {
+      left,
+      right: left + boundsWidth,
+      top,
+      bottom: top + boundsHeight,
+      centerX: left + boundsWidth / 2,
+      centerY: top + boundsHeight / 2,
+    };
+  }
+
+  function repelOverlappingFragments() {
+    for (let firstIndex = 0; firstIndex < fragmentMotion.length; firstIndex += 1) {
+      for (let secondIndex = firstIndex + 1; secondIndex < fragmentMotion.length; secondIndex += 1) {
+        const first = fragmentMotion[firstIndex];
+        const second = fragmentMotion[secondIndex];
+        const firstBounds = getFragmentBounds(first);
+        const secondBounds = getFragmentBounds(second);
+        const overlapX = Math.min(firstBounds.right, secondBounds.right)
+          - Math.max(firstBounds.left, secondBounds.left);
+        const overlapY = Math.min(firstBounds.bottom, secondBounds.bottom)
+          - Math.max(firstBounds.top, secondBounds.top);
+
+        if (overlapX <= 0 || overlapY <= 0) continue;
+
+        let normalX = 0;
+        let normalY = 0;
+        if (overlapX < overlapY) {
+          normalX = firstBounds.centerX < secondBounds.centerX ? 1 : -1;
+          const correction = overlapX / 2 + 0.5;
+          first.x -= normalX * correction;
+          second.x += normalX * correction;
+        } else {
+          normalY = firstBounds.centerY < secondBounds.centerY ? 1 : -1;
+          const correction = overlapY / 2 + 0.5;
+          first.y -= normalY * correction;
+          second.y += normalY * correction;
+        }
+
+        const firstVelocityX = Math.cos(first.angle) * first.speed + first.impulseX;
+        const firstVelocityY = Math.sin(first.angle) * first.speed + first.impulseY;
+        const secondVelocityX = Math.cos(second.angle) * second.speed + second.impulseX;
+        const secondVelocityY = Math.sin(second.angle) * second.speed + second.impulseY;
+        const closingSpeed = (firstVelocityX - secondVelocityX) * normalX
+          + (firstVelocityY - secondVelocityY) * normalY;
+
+        if (closingSpeed > 0) {
+          const nextFirstVelocityX = firstVelocityX - closingSpeed * normalX;
+          const nextFirstVelocityY = firstVelocityY - closingSpeed * normalY;
+          const nextSecondVelocityX = secondVelocityX + closingSpeed * normalX;
+          const nextSecondVelocityY = secondVelocityY + closingSpeed * normalY;
+
+          first.speed = Math.max(3.5, Math.hypot(nextFirstVelocityX, nextFirstVelocityY));
+          second.speed = Math.max(3.5, Math.hypot(nextSecondVelocityX, nextSecondVelocityY));
+          first.angle = Math.atan2(nextFirstVelocityY, nextFirstVelocityX);
+          second.angle = Math.atan2(nextSecondVelocityY, nextSecondVelocityX);
+          first.targetAngle = first.angle;
+          second.targetAngle = second.angle;
+          first.impulseX = 0;
+          first.impulseY = 0;
+          second.impulseX = 0;
+          second.impulseY = 0;
+        }
+      }
+    }
+  }
+
+  function applyBackgroundDragForce(pointerX, pointerY, velocityX, velocityY) {
+    if (!fragmentContainer) return;
+    const reach = Math.max(
+      320,
+      Math.min(fragmentContainer.clientWidth, fragmentContainer.clientHeight) * 0.62
+    );
+
+    fragmentMotion.forEach((motion) => {
+      const bounds = getFragmentBounds(motion);
+      const deltaX = bounds.centerX - pointerX;
+      const deltaY = bounds.centerY - pointerY;
+      const distance = Math.hypot(deltaX, deltaY);
+      if (distance >= reach) return;
+
+      const normalizedDistance = distance / reach;
+      const influence = Math.pow(1 - normalizedDistance, 2);
+      const pointerSpeed = Math.hypot(velocityX, velocityY);
+      const wakeStrength = Math.min(32, pointerSpeed * 0.032) * influence;
+      const distanceSafe = Math.max(1, distance);
+
+      motion.impulseX += velocityX * 0.2 * influence
+        + (deltaX / distanceSafe) * wakeStrength;
+      motion.impulseY += velocityY * 0.2 * influence
+        + (deltaY / distanceSafe) * wakeStrength;
+
+      const impulseMagnitude = Math.hypot(motion.impulseX, motion.impulseY);
+      if (impulseMagnitude > 165) {
+        const limit = 165 / impulseMagnitude;
+        motion.impulseX *= limit;
+        motion.impulseY *= limit;
+      }
+    });
+  }
+
+  function beginBackgroundDrag(event) {
+    if (event.button !== 0 || event.target.closest(".book-stage")) return;
+    const bounds = fragmentContainer.getBoundingClientRect();
+    backgroundDrag.active = true;
+    backgroundDrag.pointerId = event.pointerId;
+    backgroundDrag.x = event.clientX - bounds.left;
+    backgroundDrag.y = event.clientY - bounds.top;
+    backgroundDrag.velocityX = 0;
+    backgroundDrag.velocityY = 0;
+    backgroundDrag.previousTime = performance.now();
+    fragmentContainer.classList.add("is-dragging");
+    fragmentContainer.setPointerCapture?.(event.pointerId);
+  }
+
+  function moveBackgroundDrag(event) {
+    if (!backgroundDrag.active || event.pointerId !== backgroundDrag.pointerId) return;
+    const bounds = fragmentContainer.getBoundingClientRect();
+    const nextX = event.clientX - bounds.left;
+    const nextY = event.clientY - bounds.top;
+    const now = performance.now();
+    const deltaSeconds = Math.max(0.008, (now - backgroundDrag.previousTime) / 1000);
+    const measuredVelocityX = (nextX - backgroundDrag.x) / deltaSeconds;
+    const measuredVelocityY = (nextY - backgroundDrag.y) / deltaSeconds;
+
+    backgroundDrag.velocityX += (measuredVelocityX - backgroundDrag.velocityX) * 0.42;
+    backgroundDrag.velocityY += (measuredVelocityY - backgroundDrag.velocityY) * 0.42;
+    applyBackgroundDragForce(
+      nextX,
+      nextY,
+      backgroundDrag.velocityX,
+      backgroundDrag.velocityY
+    );
+
+    backgroundDrag.x = nextX;
+    backgroundDrag.y = nextY;
+    backgroundDrag.previousTime = now;
+  }
+
+  function endBackgroundDrag(event) {
+    if (!backgroundDrag.active || event.pointerId !== backgroundDrag.pointerId) return;
+    backgroundDrag.active = false;
+    fragmentContainer.classList.remove("is-dragging");
+    fragmentContainer.releasePointerCapture?.(event.pointerId);
+    backgroundDrag.pointerId = null;
+  }
+
   function animateFragments(time) {
     if (reducedMotion || !fragmentContainer) return;
 
@@ -461,9 +629,12 @@
 
       motion.angle += shortestAngle(motion.angle, motion.targetAngle)
         * Math.min(1, delta * 0.32);
-      motion.x += Math.cos(motion.angle) * motion.speed * delta;
-      motion.y += Math.sin(motion.angle) * motion.speed * delta;
+      motion.x += (Math.cos(motion.angle) * motion.speed + motion.impulseX) * delta;
+      motion.y += (Math.sin(motion.angle) * motion.speed + motion.impulseY) * delta;
       motion.rotation += motion.spin * delta;
+      const impulseDamping = Math.pow(0.93, delta * 60);
+      motion.impulseX *= impulseDamping;
+      motion.impulseY *= impulseDamping;
 
       const elementWidth = motion.element.offsetWidth;
       const elementHeight = motion.element.offsetHeight;
@@ -496,11 +667,13 @@
       if (bouncedHorizontally) {
         motion.angle = Math.PI - motion.angle;
         motion.targetAngle = Math.PI - motion.targetAngle;
+        motion.impulseX *= -0.58;
       }
 
       if (bouncedVertically) {
         motion.angle = -motion.angle;
         motion.targetAngle = -motion.targetAngle;
+        motion.impulseY *= -0.58;
       }
 
       left = motion.element.offsetLeft + motion.x - (boundsWidth - elementWidth) / 2;
@@ -528,27 +701,36 @@
             motion.angle = Math.PI - motion.angle;
             motion.targetAngle = Math.PI - motion.targetAngle;
           }
+          motion.impulseX = -Math.abs(motion.impulseX) * 0.58;
         } else if (exit.side === "right") {
           motion.x += exit.distance;
           if (Math.cos(motion.angle) < 0) {
             motion.angle = Math.PI - motion.angle;
             motion.targetAngle = Math.PI - motion.targetAngle;
           }
+          motion.impulseX = Math.abs(motion.impulseX) * 0.58;
         } else if (exit.side === "top") {
           motion.y -= exit.distance;
           if (Math.sin(motion.angle) > 0) {
             motion.angle = -motion.angle;
             motion.targetAngle = -motion.targetAngle;
           }
+          motion.impulseY = -Math.abs(motion.impulseY) * 0.58;
         } else {
           motion.y += exit.distance;
           if (Math.sin(motion.angle) < 0) {
             motion.angle = -motion.angle;
             motion.targetAngle = -motion.targetAngle;
           }
+          motion.impulseY = Math.abs(motion.impulseY) * 0.58;
         }
       }
 
+    });
+
+    repelOverlappingFragments();
+
+    fragmentMotion.forEach((motion) => {
       motion.element.style.transform =
         `translate3d(${motion.x.toFixed(2)}px, ${motion.y.toFixed(2)}px, 0) `
         + `rotate(${(motion.baseRotation + motion.rotation).toFixed(2)}deg)`;
@@ -567,6 +749,10 @@
 
   nextButton.addEventListener("click", turnForward);
   previousButton.addEventListener("click", turnBackward);
+  fragmentContainer.addEventListener("pointerdown", beginBackgroundDrag);
+  fragmentContainer.addEventListener("pointermove", moveBackgroundDrag);
+  fragmentContainer.addEventListener("pointerup", endBackgroundDrag);
+  fragmentContainer.addEventListener("pointercancel", endBackgroundDrag);
 
   stage.addEventListener("pointerup", (event) => {
     if (!interactive || turn || !pagesReady) return;
