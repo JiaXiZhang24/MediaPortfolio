@@ -23,3 +23,13 @@ The **Graphic Design** navigation item now links to `graphic-design.html`.
 - Correct front/back texture mapping from the supplied two-page spread files
 - Click, keyboard-arrow, touch, and interactive-mode controls
 - Responsive framing and reduced-motion support
+
+## Photography
+
+Open `photography.html` for the orbit manuscript photography portfolio.
+
+- Eight photography projects orbit on oval diagram lines at gentle, different speeds.
+- Select a small cover or index entry to place that project in the large center circle; click the center to open its gallery.
+- Galleries contain all supplied photographs. Botanic Gardens has separate Kew Garden and Shanghai Botanic Garden sections.
+- Project years are currently blank in `photography-data.json`; add them there when confirmed.
+- Gallery photos open in a full-size viewer, and the page supports keyboard navigation and reduced motion.

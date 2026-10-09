@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Cathy Zhang — photography portfolio." />
+    <title>Photography — Cathy Zhang Portfolio</title>
+    <link rel="stylesheet" href="photography.css?v=20261004-1" />
+  </head>
+  <body>
+    <main class="photography-page">
+      <header class="site-header">
+        <nav class="primary-nav" aria-label="Portfolio sections">
+          <a class="nav-home" href="index.html">Home</a>
+          <div class="nav-sections">
+            <a href="photography.html" class="is-current" aria-current="page">Photography</a>
+            <a href="videography.html">Videography</a>
+            <a href="graphic-design.html">Graphic Design</a>
+            <span>About</span>
+          </div>
+        </nav>
+      </header>
+      <section class="atlas-view" id="atlasView" aria-label="Photography projects">
+        <canvas class="halftone-field halftone-field--atlas" id="atlasHalftone" aria-hidden="true"></canvas>
+        <div class="orbit-diagram" id="orbitDiagram">
+          <svg class="orbit-drawing" viewBox="0 0 1000 640" preserveAspectRatio="none" aria-hidden="true">
+            <ellipse class="orbit-drawing__outer" cx="500" cy="320" rx="465" ry="285" />
+            <ellipse class="orbit-drawing__middle" cx="500" cy="320" rx="355" ry="230" />
+            <ellipse class="orbit-drawing__inner" cx="500" cy="320" rx="250" ry="165" />
+            <path class="orbit-drawing__axis" d="M 62 320 H 938 M 500 35 V 605" />
+            <g class="orbit-drawing__notation">
+              <circle cx="35" cy="320" r="2" /><circle cx="965" cy="320" r="2" />
+              <circle cx="500" cy="35" r="2" /><circle cx="500" cy="605" r="2" />
+              <text x="47" y="312">a</text><text x="948" y="312">b</text>
+              <text x="511" y="29">c</text><text x="511" y="601">d</text>
+            </g>
+          </svg>
+          <div class="orbiting-covers" id="orbitingCovers" aria-label="Photography project covers"></div>
+          <button class="center-cover photo-circle" id="centerCover" type="button" aria-label="Open selected photography project">
+            <span class="circle-image-wrap"><img id="centerImage" alt="" /><img id="centerImageNext" alt="" /></span>
+          </button>
+        </div>
+        <div class="project-caption" aria-live="polite">
+          <p class="project-caption__eyebrow"><span id="activeNumber">04</span> / Photography series</p>
+          <h2 id="activeTitle">Botanic Gardens</h2>
+          <p class="project-caption__subtitle" id="activeSubtitle">Kew Garden · Shanghai Botanic Garden</p>
+        </div>
+        <aside class="project-index atlas-index" aria-label="Photography index">
+          <nav class="project-list" id="atlasProjectList" aria-label="Photography projects"></nav>
+          <p class="project-count"><span id="atlasCurrent">04</span><span aria-hidden="true">/</span><span id="atlasTotal">08</span></p>
+        </aside>
+        <p class="atlas-hint">Select a small circle, then open the center image</p>
+        <p class="load-status" id="loadStatus" role="status">Loading photography…</p>
+      </section>
+
+      <section class="project-view" id="projectView" aria-labelledby="projectViewTitle" hidden>
+        <canvas class="halftone-field halftone-field--detail" id="detailHalftone" aria-hidden="true"></canvas>
+        <div class="project-content">
+          <button class="back-button" id="backToAtlas" type="button">← Back to photography</button>
+          <div class="project-view__heading">
+            <h1 id="projectViewTitle"></h1>
+            <nav class="section-links" id="sectionLinks" aria-label="Sections of this project"></nav>
+          </div>
+          <div class="project-sections" id="projectSections"></div>
+        </div>
+        <aside class="project-index detail-index" aria-label="Photography index">
+          <nav class="project-list" id="detailProjectList" aria-label="Photography projects"></nav>
+          <p class="project-count"><span id="detailCurrent">04</span><span aria-hidden="true">/</span><span id="detailTotal">08</span></p>
+        </aside>
+      </section>
+    </main>
+    <dialog class="image-dialog" id="imageDialog" aria-label="Photograph viewer">
+      <button class="image-dialog__close" id="closeImage" type="button" aria-label="Close photograph">×</button>
+      <button class="image-dialog__previous" id="previousImage" type="button" aria-label="Previous photograph">‹</button>
+      <img id="lightboxImage" alt="" />
+      <button class="image-dialog__next" id="nextImage" type="button" aria-label="Next photograph">›</button>
+      <p class="image-dialog__count" id="imageCount"></p>
+    </dialog>
+    <script src="photography.js?v=20261004-5" defer></script>
+  </body>
+</html>
