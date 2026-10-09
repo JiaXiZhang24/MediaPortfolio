@@ -145,6 +145,7 @@ function presentDitherBackground(renderCanvas, width, height, token) {
     const visibleContext = ditherBackground.getContext("2d", { alpha: false });
     visibleContext.drawImage(renderCanvas, 0, 0);
     ditherBackground.classList.add("is-visible");
+    ditherBackground.dataset.ready = "true";
     activeDitherBackground = ditherBackground;
     ditherHasRendered = true;
     return;
@@ -166,6 +167,7 @@ function presentDitherBackground(renderCanvas, width, height, token) {
   incoming.height = height;
   const incomingContext = incoming.getContext("2d", { alpha: false });
   incomingContext.drawImage(renderCanvas, 0, 0);
+  incoming.dataset.ready = "true";
   void incoming.offsetWidth;
 
   window.requestAnimationFrame(() => {

@@ -1,35 +1,38 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="alt-site">
   <head>
     <meta charset="UTF-8" />
+    <base href="../" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>document.documentElement.classList.add("page-transition-pending"); setTimeout(() => document.documentElement.classList.remove("page-transition-pending"), 10000);</script>
     <meta
       name="description"
       content="Cathy Zhang — graphic design portfolio and interactive Pablo Picasso zine."
     />
-    <title>Graphic Design — Cathy Zhang Portfolio</title>
+    <title>Alternate — Graphic Design — Cathy Zhang Portfolio</title>
     <link rel="stylesheet" href="graphic-design.css?v=20261009-1" />
     <link rel="stylesheet" href="page-transition.css?v=20261009-2" />
+    <link rel="stylesheet" href="alt/alt.css?v=20261009-2" />
   </head>
   <body>
     <main class="graphic-page">
       <header class="site-header">
         <nav class="primary-nav" aria-label="Portfolio sections">
-          <a class="nav-home" href="index.html">Home</a>
+          <a class="nav-home" href="alt/index.html">Home</a>
           <div class="nav-sections">
-            <a href="photography.html">Photography</a>
-            <a href="videography.html">Videography</a>
-            <a href="graphic-design.html" class="is-current" aria-current="page">Graphic Design</a>
+            <a href="alt/photography.html">Photography</a>
+            <a href="alt/videography.html">Videography</a>
+            <a href="alt/graphic-design.html" class="is-current" aria-current="page">Graphic Design</a>
             <span class="nav-pending" title="About page coming soon">About</span>
           </div>
         </nav>
       </header>
+      <p class="alt-page-index">03 / GRAPHIC DESIGN <span>—</span> SELECTED WORK</p>
 
       <section class="zine-experience" aria-labelledby="zine-title">
         <div class="zine-heading">
           <p class="zine-heading__eyebrow">Zine</p>
-          <h1 id="zine-title">5 Eras of Pablo Picasso</h1>
+          <h1 id="zine-title">5 Eras of Pablo Picasso<span class="alt-red-period">.</span></h1>
           <p class="zine-heading__year">2020</p>
         </div>
 

@@ -1,34 +1,37 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="alt-site">
   <head>
     <meta charset="UTF-8" />
+    <base href="../" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>document.documentElement.classList.add("page-transition-pending"); setTimeout(() => document.documentElement.classList.remove("page-transition-pending"), 10000);</script>
     <meta name="description" content="Cathy Zhang — photography portfolio." />
-    <title>Photography — Cathy Zhang Portfolio</title>
+    <title>Alternate — Photography — Cathy Zhang Portfolio</title>
     <link rel="stylesheet" href="photography.css?v=20261009-1" />
     <link rel="stylesheet" href="page-transition.css?v=20261009-2" />
+    <link rel="stylesheet" href="alt/alt.css?v=20261009-2" />
   </head>
   <body>
     <main class="photography-page">
       <header class="site-header">
         <nav class="primary-nav" aria-label="Portfolio sections">
-          <a class="nav-home" href="index.html">Home</a>
+          <a class="nav-home" href="alt/index.html">Home</a>
           <div class="nav-sections">
-            <a href="photography.html" class="is-current" aria-current="page">Photography</a>
-            <a href="videography.html">Videography</a>
-            <a href="graphic-design.html">Graphic Design</a>
+            <a href="alt/photography.html" class="is-current" aria-current="page">Photography</a>
+            <a href="alt/videography.html">Videography</a>
+            <a href="alt/graphic-design.html">Graphic Design</a>
             <span class="nav-pending" title="About page coming soon">About</span>
           </div>
         </nav>
       </header>
+      <p class="alt-page-index">01 / PHOTOGRAPHY <span>—</span> SELECTED WORK</p>
       <section class="atlas-view" id="atlasView" aria-label="Photography projects">
         <canvas class="halftone-field halftone-field--atlas" id="atlasHalftone" aria-hidden="true"></canvas>
         <div class="orbit-diagram" id="orbitDiagram">
           <svg class="orbit-drawing" viewBox="0 0 1000 640" preserveAspectRatio="none" aria-hidden="true">
-            <ellipse class="orbit-drawing__outer" cx="500" cy="320" rx="465" ry="285" />
-            <ellipse class="orbit-drawing__middle" cx="500" cy="320" rx="355" ry="230" />
-            <ellipse class="orbit-drawing__inner" cx="500" cy="320" rx="250" ry="165" />
+            <ellipse class="orbit-drawing__outer" cx="500" cy="320" rx="465" ry="285" transform="rotate(-14 500 320)" />
+            <ellipse class="orbit-drawing__middle" cx="500" cy="320" rx="355" ry="230" transform="rotate(-14 500 320)" />
+            <ellipse class="orbit-drawing__inner" cx="500" cy="320" rx="250" ry="165" transform="rotate(-14 500 320)" />
             <path class="orbit-drawing__axis" d="M 62 320 H 938 M 500 35 V 605" />
             <g class="orbit-drawing__notation">
               <circle cx="35" cy="320" r="2" /><circle cx="965" cy="320" r="2" />

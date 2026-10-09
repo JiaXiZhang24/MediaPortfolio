@@ -1,0 +1,137 @@
+.alt-site {
+  --paper: #fdfdfc;
+  --ink: #30302e;
+  --muted: #777773;
+  --line: #bdbdb8;
+  --accent: #bb4434;
+  color-scheme: light;
+}
+
+.alt-site body,
+.alt-site .photography-page,
+.alt-site .video-page,
+.alt-site .graphic-page { background: var(--paper); color: var(--ink); }
+
+.alt-site .site-header { padding: clamp(20px, 3vw, 38px) 4vw 0; background: var(--paper); }
+.alt-site .primary-nav { padding: 0 0 17px; border-bottom: 1px solid var(--line); }
+.alt-site .primary-nav a,
+.alt-site .primary-nav .nav-pending { color: var(--ink); font: 400 clamp(15px, 1.15vw, 20px)/1 "Times New Roman", Times, serif; }
+.alt-site .primary-nav .nav-pending { color: #aaa9a4; opacity: 1; }
+.alt-site .primary-nav a:hover { color: var(--accent); }
+.alt-site .primary-nav .is-current::before { left: -10px; width: 4px; height: 4px; background: var(--accent); }
+.alt-site .primary-nav a::after { background: var(--accent); }
+.alt-site .nav-sections { gap: clamp(15px, 3vw, 52px); }
+
+.alt-site .photography-page,
+.alt-site .video-page,
+.alt-site .graphic-page { position: relative; }
+.alt-site .alt-page-index {
+  position: absolute;
+  z-index: 29;
+  top: clamp(92px, 7.4vw, 121px);
+  left: 4vw;
+  margin: 0;
+  padding: 5px 12px 5px 0;
+  background: var(--paper);
+  color: var(--muted);
+  font: 10px/1.5 Arial, Helvetica, sans-serif;
+  letter-spacing: .16em;
+  pointer-events: none;
+}
+.alt-site .alt-page-index span { color: var(--accent); margin: 0 .45em; }
+
+/* Photography: the images follow the same tilted ellipse drawn in the SVG. */
+.alt-site .atlas-view { background: var(--paper); }
+.alt-site .orbit-diagram { width: min(73vw, 1040px); height: min(74svh, 670px); }
+.alt-site .orbit-drawing ellipse { stroke: rgba(90, 90, 86, .48); }
+.alt-site .orbit-drawing__inner { stroke: rgba(100, 100, 96, .36) !important; }
+.alt-site .orbit-drawing__axis { stroke: rgba(112, 112, 108, .26); }
+.alt-site .orbit-drawing__notation { fill: #888882; stroke: #888882; }
+.alt-site .project-caption { left: 4vw; bottom: 30px; }
+.alt-site .project-caption__eyebrow,
+.alt-site .project-count,
+.alt-site .atlas-hint,
+.alt-site .project-list button,
+.alt-site .back-button,
+.alt-site .section-links a,
+.alt-site .photo-item__caption { letter-spacing: .15em; }
+.alt-site .project-caption__eyebrow::before { content: ""; display: inline-block; width: 4px; height: 4px; margin: 0 9px 2px 0; border-radius: 50%; background: var(--accent); }
+.alt-site .project-caption h2,
+.alt-site .project-view__heading h1 { font-style: normal; letter-spacing: -.065em; }
+.alt-site .project-caption h2 { font-size: clamp(40px, 4vw, 62px); margin: 10px 0 11px; }
+.alt-site .project-list button.is-active { color: var(--accent); }
+.alt-site .atlas-index { right: 4vw; top: 48px; }
+.alt-site .detail-index { right: 4vw; }
+.alt-site .project-content { padding-left: 4vw; }
+.alt-site .project-view__heading { border-bottom-color: var(--line); }
+.alt-site .project-section__heading { border-bottom-color: var(--line); }
+.alt-site .photo-item img { background: #f1f1ef; }
+
+/* Videography: retain the moving card orbit and the generated dither. */
+.alt-site body.video-page--alternate { --paper: #fdfdfc; }
+.alt-site .video-page--alternate .carousel,
+.alt-site .dither-background,
+.alt-site .index-panel,
+.alt-site .orbit-void { background-color: var(--paper); }
+.alt-site .dither-background.is-visible { opacity: .68; }
+.alt-site .video-page--alternate .project-heading { left: 4vw; }
+.alt-site .project-heading h1,
+.alt-site .dialog-header h2 { font-style: normal; letter-spacing: -.062em; }
+.alt-site .project-heading h1 { font-size: clamp(43px, 4.7vw, 78px); }
+.alt-site .project-heading__eyebrow::before { content: ""; display: inline-block; width: 4px; height: 4px; margin: 0 9px 2px 0; border-radius: 50%; background: var(--accent); }
+.alt-site .video-page--alternate .project-index { right: 4vw; top: 48px; }
+.alt-site .project-list button.is-active { color: var(--accent); }
+.alt-site .video-page--alternate .orbit-line { border-color: rgba(90, 90, 86, .48); }
+.alt-site .dialog-header { background: rgba(253, 253, 252, .96); border-bottom-color: var(--line); }
+.alt-site .dialog-category { color: var(--accent); }
+
+/* Graphic design: an editorial left column frames the original flipping book. */
+.alt-site .zine-experience::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 34%;
+  top: 11%;
+  bottom: 10%;
+  border-left: 1px solid rgba(120, 120, 115, .32);
+  pointer-events: none;
+}
+.alt-site .zine-heading { top: 29%; left: 4vw; width: min(28vw, 430px); text-align: left; transform: none; }
+.alt-site .zine-heading__eyebrow { color: var(--accent); }
+.alt-site .zine-heading h1 { margin: 14px 0 22px; font-size: clamp(44px, 5.2vw, 82px); font-style: normal; line-height: .9; letter-spacing: -.067em; }
+.alt-site .alt-red-period { color: var(--accent); }
+.alt-site .zine-heading__year { color: var(--muted); }
+.alt-site .book-stage { width: min(62vw, 900px); height: clamp(440px, 73vh, 790px); transform: translate(14vw, 4vh); }
+.alt-site .fragment { opacity: .8; }
+.alt-site .fragment--top-left { left: 39%; top: 1%; width: clamp(120px, 14vw, 230px); }
+.alt-site .fragment--mid-left { left: 37%; top: 35%; }
+.alt-site .fragment--bottom-left { left: 32%; bottom: 3%; }
+.alt-site .fragment--top-right { right: 2%; top: -7%; }
+.alt-site .fragment--bottom-right { right: 4%; bottom: 4%; }
+.alt-site .fragment--upper-middle { left: 54%; top: 13%; }
+.alt-site .fragment--middle-right { right: 11%; }
+.alt-site .fragment--lower-middle { right: 20%; }
+
+@media (max-width: 760px) {
+  .alt-site .site-header { padding: 18px 16px 0; }
+  .alt-site .primary-nav { gap: 12px; }
+  .alt-site .primary-nav a, .alt-site .primary-nav .nav-pending { font-size: 13px; }
+  .alt-site .nav-sections { gap: 14px; }
+  .alt-site .alt-page-index { top: 86px; left: 5vw; font-size: 8px; }
+  .alt-site .orbit-diagram { width: 96vw; height: min(66svh, 530px); }
+  .alt-site .atlas-index { top: 36px; right: 5vw; }
+  .alt-site .project-caption { left: 5vw; bottom: 22px; }
+  .alt-site .project-caption h2 { font-size: clamp(33px, 7vw, 45px); }
+  .alt-site .video-page--alternate .project-heading { left: 5vw; }
+  .alt-site .project-heading h1 { font-size: clamp(34px, 7vw, 55px); }
+  .alt-site .video-page--alternate .project-index { top: 30px; right: 5vw; }
+  .alt-site .zine-experience::before { display: none; }
+  .alt-site .zine-heading { top: 7%; left: 5vw; width: 90vw; text-align: left; }
+  .alt-site .zine-heading h1 { max-width: 440px; margin: 8px 0; font-size: clamp(36px, 8vw, 55px); }
+  .alt-site .book-stage { width: 100vw; height: min(68vh, 620px); min-height: 410px; transform: translateY(68px); }
+  .alt-site .fragment { opacity: .42; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alt-site .center-cover { animation: none; }
+}

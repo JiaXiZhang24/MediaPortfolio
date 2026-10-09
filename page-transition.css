@@ -1,0 +1,87 @@
+html.page-transition-pending body { visibility: hidden; }
+
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  overflow: hidden;
+  pointer-events: none;
+  color: #72726e;
+  font: 10px/1.4 Arial, Helvetica, sans-serif;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.page-transition-overlay svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.page-transition-overlay .transition-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(66vw, 850px);
+  aspect-ratio: 1.5;
+  border: 1px solid rgba(104, 104, 99, .38);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-18deg) scale(.3);
+  opacity: 0;
+}
+
+.page-transition-overlay .transition-ring--inner {
+  width: min(43vw, 550px);
+  border-style: dashed;
+  border-color: rgba(104, 104, 99, .3);
+}
+
+.page-transition-overlay.is-animating .transition-ring {
+  animation: transition-orbit 900ms cubic-bezier(.2, .7, .2, 1) both;
+}
+
+.page-transition-overlay.is-animating .transition-ring--inner {
+  animation-delay: 70ms;
+}
+
+.page-transition-overlay .transition-marker {
+  position: absolute;
+  top: calc(50% - min(22vw, 250px));
+  left: calc(50% + min(21vw, 260px));
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #bb4434;
+  opacity: 0;
+}
+
+.page-transition-overlay.is-animating .transition-marker {
+  animation: transition-marker 900ms ease-in-out both;
+}
+
+.page-transition-overlay .transition-status {
+  position: absolute;
+  right: 4vw;
+  bottom: 30px;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.page-transition-overlay.is-waiting .transition-status { opacity: 1; }
+
+@keyframes transition-orbit {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(-28deg) scale(.3); }
+  30% { opacity: .65; }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(95deg) scale(2.5); }
+}
+
+@keyframes transition-marker {
+  0%, 100% { opacity: 0; transform: translate(0, 0); }
+  35% { opacity: 1; transform: translate(40px, -30px); }
+  70% { opacity: .7; transform: translate(145px, -90px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition-overlay .transition-ring,
+  .page-transition-overlay .transition-marker { animation: none !important; }
+}

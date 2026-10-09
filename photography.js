@@ -22,6 +22,7 @@
     { x: 0.250, y: 0.2578125 },
   ];
   const degrees = (angle) => angle * Math.PI / 180;
+  const orbitTilt = document.documentElement.classList.contains("alt-site") ? degrees(-14) : 0;
   const slotPatterns = [
     { ring: 0, angle: degrees(-120), speed: Math.PI * 2 / 180, size: 0.88 },
     { ring: 1, angle: degrees(-70), speed: Math.PI * 2 / 145, size: 0.88 },
@@ -190,8 +191,10 @@
   function updateOrbitPositions() {
     for (const slot of slots) {
       const ring = rings[slot.ring];
-      slot.button.style.left = `${(0.5 + Math.cos(slot.angle) * ring.x) * 100}%`;
-      slot.button.style.top = `${(0.5 + Math.sin(slot.angle) * ring.y) * 100}%`;
+      const x = Math.cos(slot.angle) * ring.x;
+      const y = Math.sin(slot.angle) * ring.y;
+      slot.button.style.left = `${(0.5 + x * Math.cos(orbitTilt) - y * Math.sin(orbitTilt)) * 100}%`;
+      slot.button.style.top = `${(0.5 + x * Math.sin(orbitTilt) + y * Math.cos(orbitTilt)) * 100}%`;
     }
   }
 

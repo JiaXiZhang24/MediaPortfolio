@@ -1,31 +1,34 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="alt-site">
   <head>
     <meta charset="UTF-8" />
+    <base href="../" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>document.documentElement.classList.add("page-transition-pending"); setTimeout(() => document.documentElement.classList.remove("page-transition-pending"), 10000);</script>
     <meta
       name="description"
       content="Cathy Zhang — videography portfolio, short films, moving-image works, and selected frames."
     />
-    <title>Videography — Cathy Zhang Portfolio</title>
+    <title>Alternate — Videography — Cathy Zhang Portfolio</title>
     <link rel="stylesheet" href="videography.css?v=20261009-1" />
     <link rel="stylesheet" href="videography-alt.css?v=20261009-2" />
     <link rel="stylesheet" href="page-transition.css?v=20261009-2" />
+    <link rel="stylesheet" href="alt/alt.css?v=20261009-2" />
   </head>
   <body class="video-page--alternate">
     <main class="video-page">
       <header class="site-header">
         <nav class="primary-nav" aria-label="Portfolio sections">
-          <a class="nav-home" href="index.html">Home</a>
+          <a class="nav-home" href="alt/index.html">Home</a>
           <div class="nav-sections">
-            <a href="photography.html">Photography</a>
-            <a href="videography.html" class="is-current" aria-current="page">Videography</a>
-            <a href="graphic-design.html">Graphic Design</a>
+            <a href="alt/photography.html">Photography</a>
+            <a href="alt/videography.html" class="is-current" aria-current="page">Videography</a>
+            <a href="alt/graphic-design.html">Graphic Design</a>
             <span class="nav-pending" title="About page coming soon">About</span>
           </div>
         </nav>
       </header>
+      <p class="alt-page-index">02 / VIDEOGRAPHY <span>—</span> SELECTED WORK</p>
 
       <section class="carousel" id="carousel" aria-label="Selected videography projects">
         <canvas class="dither-background is-visible" id="ditherBackground" aria-hidden="true"></canvas>
