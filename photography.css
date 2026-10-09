@@ -54,6 +54,8 @@ button { -webkit-tap-highlight-color: transparent; }
   white-space: nowrap;
 }
 
+.primary-nav .nav-pending { opacity: 0.45; cursor: default; }
+
 .nav-sections { display: flex; align-items: center; gap: clamp(22px, 3vw, 56px); }
 .primary-nav a::after {
   content: "";

@@ -25,7 +25,8 @@
   border-bottom-color: rgba(17, 17, 15, 0.32);
 }
 
-.video-page--alternate .primary-nav a {
+.video-page--alternate .primary-nav a,
+.video-page--alternate .primary-nav .nav-pending {
   font-family: "Times New Roman", Times, serif;
   font-size: clamp(16px, 1.25vw, 21px);
   font-weight: 400;

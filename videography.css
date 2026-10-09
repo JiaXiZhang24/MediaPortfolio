@@ -50,7 +50,8 @@ a {
   border-bottom: 1px solid var(--line);
 }
 
-.primary-nav a {
+.primary-nav a,
+.primary-nav .nav-pending {
   position: relative;
   flex: 0 0 auto;
   font-size: clamp(14px, 1.5vw, 24px);
@@ -59,6 +60,8 @@ a {
   text-decoration: none;
   white-space: nowrap;
 }
+
+.primary-nav .nav-pending { opacity: 0.45; cursor: default; }
 
 .primary-nav a::after {
   content: "";

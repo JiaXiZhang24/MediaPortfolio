@@ -56,7 +56,8 @@ function makeTiles() {
     tile.dataset.column = String(column);
     image.alt = "";
     image.draggable = false;
-    image.src = `assets/covers/${filename}`;
+    image.decoding = "async";
+    image.src = `assets/covers/web/${filename.replace(/\.[^.]+$/, ".webp")}`;
     image.addEventListener("load", () => {
       const ratio = image.naturalWidth / image.naturalHeight;
       tile.style.aspectRatio = String(Math.min(1.72, Math.max(0.78, ratio)));
@@ -65,7 +66,7 @@ function makeTiles() {
 
     tile.append(image);
     world.append(tile);
-    tiles.push({ element: tile, row, column, phase: index * 0.53 });
+    tiles.push({ element: tile, row, column, phase: index * 0.53, layout: null });
   });
 }
 
@@ -158,46 +159,48 @@ function animateRain(time) {
 }
 
 function layoutTiles(time = 0) {
-  const mobile = window.innerWidth < 700;
+  const updateGeometry = time === 0;
+  const mobile = updateGeometry ? window.innerWidth < 700 : sceneMobile;
   const cameraDistance = mobile ? 620 : 850;
   const sphereRadius = cameraDistance;
-  const perspectiveDistance = mobile ? 2700 : 3200;
-  const mastheadDepth = 2200;
-  const mastheadScale = (perspectiveDistance - mastheadDepth) / perspectiveDistance;
-  const horizontalStep = mobile ? 13 : 14;
-  const verticalStep = mobile ? 18 : 16;
   const floatAmount = reducedMotion ? 0 : 6.2;
 
-  sceneMobile = mobile;
-  sceneRadius = sphereRadius;
-  rainGroundY = Math.max(300, window.innerHeight * 0.4);
-  gallery.style.perspective = `${perspectiveDistance}px`;
+  if (updateGeometry) {
+    const perspectiveDistance = mobile ? 2700 : 3200;
+    const mastheadDepth = 2200;
+    const mastheadScale = (perspectiveDistance - mastheadDepth) / perspectiveDistance;
+    sceneMobile = mobile;
+    sceneRadius = sphereRadius;
+    rainGroundY = Math.max(300, window.innerHeight * 0.4);
+    gallery.style.perspective = `${perspectiveDistance}px`;
+    masthead.style.transform = `translate3d(-50%, -50%, ${mastheadDepth}px) scale(${mastheadScale})`;
+    masthead.dataset.depth = String(mastheadDepth);
+  }
 
-  tiles.forEach(({ element, row, column, phase }) => {
-    const yawAngle = (column - 3) * horizontalStep;
-    const pitchAngle = row * verticalStep;
-    const yawRadians = yawAngle * Math.PI / 180;
-    const pitchRadians = pitchAngle * Math.PI / 180;
+  tiles.forEach((tile) => {
+    const { element, row, column, phase } = tile;
+    if (updateGeometry) {
+      const horizontalStep = mobile ? 13 : 14;
+      const verticalStep = mobile ? 18 : 16;
+      const yawAngle = (column - 3) * horizontalStep;
+      const pitchAngle = row * verticalStep;
+      const yawRadians = yawAngle * Math.PI / 180;
+      const pitchRadians = pitchAngle * Math.PI / 180;
+      const x = sphereRadius * Math.sin(yawRadians) * Math.cos(pitchRadians);
+      const y = sphereRadius * Math.sin(pitchRadians);
+      const z = -sphereRadius * Math.cos(yawRadians) * Math.cos(pitchRadians);
+      const edge = (Math.abs(yawAngle) + Math.abs(pitchAngle) * 0.55) / 55;
+      const opacity = Math.max(0.68, 0.98 - edge * 0.16);
+      const blur = Math.max(0, edge * 0.18);
+      tile.layout = { x, y, z, yawAngle, pitchAngle };
+      element.style.opacity = String(opacity);
+      element.style.filter = `saturate(.9) brightness(1.02) blur(${blur}px)`;
+    }
+    const { x, y, z, yawAngle, pitchAngle } = tile.layout;
     const floatY = Math.sin(time * 0.00045 + phase) * floatAmount;
     const floatRotation = Math.sin(time * 0.00032 + phase * 1.4) * 0.42;
-    const x = sphereRadius * Math.sin(yawRadians) * Math.cos(pitchRadians);
-    const y = sphereRadius * Math.sin(pitchRadians) + floatY;
-    const z = -sphereRadius * Math.cos(yawRadians) * Math.cos(pitchRadians);
-    const edge = (Math.abs(yawAngle) + Math.abs(pitchAngle) * 0.55) / 55;
-    const opacity = Math.max(0.68, 0.98 - edge * 0.16);
-    const blur = Math.max(0, edge * 0.18);
-
-    element.style.opacity = String(opacity);
-    element.style.filter = `saturate(.9) brightness(1.02) blur(${blur}px)`;
-    element.style.transform = `translate3d(calc(${x}px - 50%), calc(${y}px - 50%), ${z}px) rotateY(${-yawAngle}deg) rotateX(${pitchAngle}deg) rotateZ(${floatRotation}deg)`;
+    element.style.transform = `translate3d(calc(${x}px - 50%), calc(${y + floatY}px - 50%), ${z}px) rotateY(${-yawAngle}deg) rotateX(${pitchAngle}deg) rotateZ(${floatRotation}deg)`;
   });
-
-  // The title stays camera-facing and floats 2200px in front of the wall.
-  // Scale compensation preserves its original apparent type size at that depth.
-  masthead.style.transform = `translate3d(-50%, -50%, ${mastheadDepth}px) scale(${mastheadScale})`;
-  masthead.dataset.depth = String(mastheadDepth);
-
-  world.dataset.cameraDistance = String(cameraDistance);
 }
 
 function animate(time) {
@@ -210,8 +213,7 @@ function animate(time) {
 
   state.yaw += (state.targetYaw - state.yaw) * (reducedMotion ? 1 : 0.085);
   state.pitch += (state.targetPitch - state.pitch) * (reducedMotion ? 1 : 0.085);
-  const cameraDistance = Number(world.dataset.cameraDistance || 1100);
-  world.style.transform = `translateZ(${cameraDistance}px) rotateX(${state.pitch}deg) rotateY(${-state.yaw}deg)`;
+  world.style.transform = `translateZ(${sceneRadius}px) rotateX(${state.pitch}deg) rotateY(${-state.yaw}deg)`;
   rainWorldBack.style.transform = world.style.transform;
   rainWorldFront.style.transform = world.style.transform;
   layoutTiles(time);
@@ -220,6 +222,7 @@ function animate(time) {
 }
 
 function onPointerDown(event) {
+  if (event.button !== 0 || event.target.closest("a, button, input, select, textarea")) return;
   state.dragging = true;
   state.lastX = event.clientX;
   state.lastY = event.clientY;
@@ -243,6 +246,7 @@ function onPointerMove(event) {
 }
 
 function onPointerUp(event) {
+  if (!state.dragging) return;
   state.dragging = false;
   portfolio.classList.remove("is-dragging");
   portfolio.releasePointerCapture?.(event.pointerId);

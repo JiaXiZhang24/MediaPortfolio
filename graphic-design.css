@@ -54,7 +54,8 @@ a {
   border-bottom: 1px solid rgba(17, 17, 15, 0.32);
 }
 
-.primary-nav a {
+.primary-nav a,
+.primary-nav .nav-pending {
   position: relative;
   flex: 0 0 auto;
   font-family: "Times New Roman", Times, serif;
@@ -67,6 +68,8 @@ a {
   text-transform: capitalize;
   white-space: nowrap;
 }
+
+.primary-nav .nav-pending { opacity: 0.45; cursor: default; }
 
 .nav-home {
   flex: 0 0 auto;
