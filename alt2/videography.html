@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" class="alt-site alt-two">
+  <head>
+    <meta charset="UTF-8" />
+    <base href="../" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>document.documentElement.classList.add("page-transition-pending"); setTimeout(() => document.documentElement.classList.remove("page-transition-pending"), 10000);</script>
+    <meta
+      name="description"
+      content="Cathy Zhang — videography portfolio, short films, moving-image works, and selected frames."
+    />
+    <title>Archive — Videography — Cathy Zhang Portfolio</title>
+    <link rel="stylesheet" href="videography.css?v=20261009-1" />
+    <link rel="stylesheet" href="videography-alt.css?v=20261009-2" />
+    <link rel="stylesheet" href="page-transition.css?v=20261009-2" />
+    <link rel="stylesheet" href="alt/alt.css?v=20261009-2" />
+    <link rel="stylesheet" href="alt2/alt2.css?v=20261011-2" />
+  </head>
+  <body class="video-page--alternate">
+    <main class="video-page">
+      <div class="archive-topline"><span>JXZ / VISUAL ARCHIVE</span><span>FILE 02 <b>·</b> VIDEOGRAPHY</span></div>
+      <header class="site-header">
+        <nav class="primary-nav" aria-label="Portfolio sections">
+          <a class="nav-home" href="alt2/index.html">Home</a>
+          <div class="nav-sections">
+            <a href="alt2/photography.html">Photography</a>
+            <a href="alt2/videography.html" class="is-current" aria-current="page">Videography</a>
+            <a href="alt2/graphic-design.html">Graphic Design</a>
+            <span class="nav-pending" title="About page coming soon">About</span>
+          </div>
+        </nav>
+      </header>
+      <p class="alt-page-index">02 / VIDEOGRAPHY <span>—</span> SELECTED WORK</p>
+
+      <section class="carousel" id="carousel" aria-label="Selected videography projects">
+        <canvas class="dither-background is-visible" id="ditherBackground" aria-hidden="true"></canvas>
+        <canvas class="dither-background" id="ditherBackgroundNext" aria-hidden="true"></canvas>
+        <div class="orbit-void" aria-hidden="true"></div>
+        <div class="orbit-line" aria-hidden="true"></div>
+        <div class="index-panel" aria-hidden="true"></div>
+        <div class="carousel-track" id="carouselTrack"></div>
+
+        <div class="project-heading" aria-live="polite">
+          <p class="project-heading__eyebrow" id="activeCategory"></p>
+          <h1 id="activeTitle"></h1>
+          <p class="project-heading__runtime" id="activeRuntime"></p>
+        </div>
+
+        <aside class="project-index">
+          <nav class="project-list" id="projectList" aria-label="Film index"></nav>
+          <p class="project-count" aria-label="Current project">
+            <span id="currentProject">01</span>
+            <span aria-hidden="true">/</span>
+            <span id="totalProjects">07</span>
+          </p>
+        </aside>
+
+      </section>
+      <footer class="archive-footer"><span>ARCHIVE NO. 02 / CATHY ZHANG</span><span>VIDEOGRAPHY <b>·</b> END OF RECORD</span></footer>
+    </main>
+
+    <dialog class="project-dialog" id="projectDialog" aria-labelledby="dialogTitle">
+      <div class="dialog-shell">
+        <header class="dialog-header">
+          <div>
+            <p class="dialog-category">
+              <span id="dialogCategory"></span>
+              <span aria-hidden="true"> · </span>
+              <span id="dialogRuntime"></span>
+            </p>
+            <h2 id="dialogTitle"></h2>
+          </div>
+          <button class="dialog-close" id="closeDialog" type="button" aria-label="Close project">
+            <span aria-hidden="true">×</span> Close
+          </button>
+        </header>
+
+        <div class="dialog-body">
+          <div class="video-frame">
+            <video id="projectVideo" controls playsinline preload="metadata"></video>
+          </div>
+
+          <section class="stills-section" aria-labelledby="stillsTitle">
+            <div class="stills-heading">
+              <h3 id="stillsTitle">Selected Stills</h3>
+              <p id="stillsCount"></p>
+            </div>
+            <div class="stills-grid" id="stillsGrid"></div>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="videography.js?v=20261009-2"></script>
+    <script src="page-transition.js?v=20261009-2" defer></script>
+  </body>
+</html>

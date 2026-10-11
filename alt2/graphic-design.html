@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" class="alt-site alt-two">
+  <head>
+    <meta charset="UTF-8" />
+    <base href="../" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>document.documentElement.classList.add("page-transition-pending"); setTimeout(() => document.documentElement.classList.remove("page-transition-pending"), 10000);</script>
+    <meta
+      name="description"
+      content="Cathy Zhang — graphic design portfolio and interactive Pablo Picasso zine."
+    />
+    <title>Archive — Graphic Design — Cathy Zhang Portfolio</title>
+    <link rel="stylesheet" href="graphic-design.css?v=20261009-1" />
+    <link rel="stylesheet" href="page-transition.css?v=20261009-2" />
+    <link rel="stylesheet" href="alt/alt.css?v=20261009-2" />
+    <link rel="stylesheet" href="alt2/alt2.css?v=20261011-2" />
+  </head>
+  <body>
+    <main class="graphic-page">
+      <div class="archive-topline"><span>JXZ / VISUAL ARCHIVE</span><span>FILE 03 <b>·</b> GRAPHIC DESIGN</span></div>
+      <header class="site-header">
+        <nav class="primary-nav" aria-label="Portfolio sections">
+          <a class="nav-home" href="alt2/index.html">Home</a>
+          <div class="nav-sections">
+            <a href="alt2/photography.html">Photography</a>
+            <a href="alt2/videography.html">Videography</a>
+            <a href="alt2/graphic-design.html" class="is-current" aria-current="page">Graphic Design</a>
+            <span class="nav-pending" title="About page coming soon">About</span>
+          </div>
+        </nav>
+      </header>
+      <p class="alt-page-index">03 / GRAPHIC DESIGN <span>—</span> SELECTED WORK</p>
+
+      <section class="zine-experience" aria-labelledby="zine-title">
+        <p class="archive-object-code">OBJECT 001 <span>·</span> PRINTED MATTER</p>
+        <p class="archive-registration">REGISTERED IMAGE / 2020</p>
+        <div class="zine-heading">
+          <p class="zine-heading__eyebrow">Zine</p>
+          <h1 id="zine-title">5 Eras of Pablo Picasso<span class="alt-red-period">.</span></h1>
+          <p class="zine-heading__year">2020</p>
+        </div>
+
+        <img
+          class="fragment fragment--top-left"
+          src="assets/graphic-design/fragment-top-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--mid-left"
+          src="assets/graphic-design/fragment-mid-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--bottom-left"
+          src="assets/graphic-design/fragment-bottom-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--top-right"
+          src="assets/graphic-design/fragment-top-right.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--bottom-right"
+          src="assets/graphic-design/fragment-bottom-right.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--upper-middle"
+          src="assets/graphic-design/fragment-bottom-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--middle-right"
+          src="assets/graphic-design/fragment-mid-left.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="fragment fragment--lower-middle"
+          src="assets/graphic-design/fragment-bottom-right.png"
+          alt=""
+          aria-hidden="true"
+        />
+
+        <div class="book-stage" id="bookStage">
+          <img
+            class="book-fallback"
+            src="assets/zine/cover.jpg"
+            alt="Pablo Picasso zine cover"
+          />
+          <canvas id="bookCanvas" aria-label="Interactive Pablo Picasso zine"></canvas>
+          <button class="page-hit page-hit--left" id="previousPage" type="button">
+            <span class="sr-only">Turn to the previous spread</span>
+          </button>
+          <button class="page-hit page-hit--right" id="nextPage" type="button">
+            <span class="sr-only">Turn to the next spread</span>
+          </button>
+          <p class="page-status sr-only" id="pageStatus" aria-live="polite">Cover</p>
+        </div>
+
+        <div class="archive-object-foot"><span>DESCRIPTION / FIVE ERAS</span><span>MEDIUM / INTERACTIVE ZINE</span></div>
+      </section>
+      <footer class="archive-footer"><span>ARCHIVE NO. 03 / CATHY ZHANG</span><span>GRAPHIC DESIGN <b>·</b> END OF RECORD</span></footer>
+    </main>
+
+    <script src="vendor/three.classic.js?v=20260805-1"></script>
+    <script src="graphic-design.js?v=20260925-2"></script>
+    <script src="page-transition.js?v=20261009-2" defer></script>
+  </body>
+</html>
